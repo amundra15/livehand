@@ -1,7 +1,7 @@
 # LiveHand: Real-time and Photorealistic Neural Hand Rendering #
 ## Official PyTorch implementation of the ICCV '23 paper ##
 
-[Project page](https://vcai.mpi-inf.mpg.de/projects/LiveHand/) | [Paper](https://vcai.mpi-inf.mpg.de/projects/LiveHand/data/LiveHand%20-%20Real-time%20and%20Photorealistic%20Neural%20Hand%20Rendering.pdf)
+[Project page](https://vcai.mpi-inf.mpg.de/projects/LiveHand/) | [Paper](https://arxiv.org/abs/2302.07672)
 
 
 <img src='images/teaser.png'/>
@@ -71,7 +71,7 @@ Next, run the following command to generate the poses_bounds.npy files:
 
 
 ### Rendering pipeline ###
-You can download the pretrained model for test/Capture0 sequence from [here](https://nextcloud.mpi-klsb.mpg.de/index.php/s/Ba4c9DLDj8zDwSm).
+You can download the pretrained model for test/Capture0 sequence from [here](https://nextcloud.mpi-klsb.mpg.de/index.php/s/L53n52RNK7NaMPJ).
 Set the 'exp_folder' variable in scripts/render_experiments.sh to the path/containing/trained/model/checkpoint (NOTE: it supports pattern matching to specify multiple experiments).
 Then run the following command to render the experiments:
 ```bash
