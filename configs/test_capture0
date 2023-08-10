@@ -1,0 +1,59 @@
+#Experiment name
+expname = test_capture0
+description = "Training code for test_capture0"
+basedir = save/path/for/the/exp          #Experiment directory saved here
+
+#InterHand2.6M
+data_fol = path/to/train/data/
+val_data_fol = path/to/val/data/
+dataset = InterHand2.6M
+n_cam = 139
+
+#Inputs to the MLP
+points_encoding = 'uvd'
+hand_pose_conditioning = True
+
+#NeRF MLP
+netdepth = 4
+netdepth_fine = 4
+netwidth = 128
+netwidth_fine = 128
+local_nerf_output_ch = 33
+
+#NeRF sampling
+N_samples = 16
+N_importance = 0
+chunk = 20000
+netchunk = 640000             #chunk*N_samples
+
+#NeRF specifics
+use_viewdirs = True
+raw_noise_std = 1e0	
+no_ndc = True		
+load_mask = True
+sample_mask_selectively = False
+acc_loss = False
+per_pixel_bds = True
+
+#Super-Resolution
+render_full_image = True
+sr_input_ch = 32
+factor = 2          #Neural rendering downsample factor
+sr_factor = 2       #Super-resolution factor
+pose_cond_to_sr = False
+
+#Perceptual Loss
+perceptual_loss = True
+perceptual_loss_weight = 1
+
+#Logging
+i_print = 500
+i_img = 5000
+i_weights = 20000
+n_iterations = 300000
+
+lrate = 0.0025
+color_cal_lrate = 0.0001        #make 0 for simulated data
+
+#views for validation time evaluation
+; validation_views = [122,124,129,137,138]
