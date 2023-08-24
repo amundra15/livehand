@@ -113,48 +113,35 @@ def get_mano_out(params, mano_layer, bWeakPersp=False, bMatPose=False):
             param = params[param_id]
             hand_type = param['hand_type']
 
-            vertices, _, joints_mano, gaussians = _get_MANO_mesh_weak_perspective(param, hand_type, mano_layer, bMatPose)
+            vertices, _, joints_mano = _get_MANO_mesh_weak_perspective(param, hand_type, mano_layer, bMatPose)
             joints_mano = torch.cat((joints_mano, vertices[:, tips, :]), dim=1)
             joints = joints_mano[:, MANO2MANUS_joint_map, :]
 
-            centers, stddevs = gaussians
-
             all_vertices.append(vertices)
             all_joints.append(joints)
-            all_centers.append(centers)
-            all_stddevs.append(stddevs)
             hand_types.append(hand_type)
     else:
         for param_id in range(len(params)):
             param = params[param_id]
             hand_type = param['hand_type']
 
-            vertices, _, joints_mano, gaussians = _get_MANO_mesh(param, hand_type, mano_layer, bMatPose)
+            vertices, _, joints_mano = _get_MANO_mesh(param, hand_type, mano_layer, bMatPose)
             joints_mano = torch.cat((joints_mano, vertices[:, tips, :]), dim=1)
             joints = joints_mano[:, MANO2MANUS_joint_map, :]
 
-            centers, stddevs = gaussians
-
             all_vertices.append(vertices)
             all_joints.append(joints)
-            all_centers.append(centers)
-            all_stddevs.append(stddevs)
             hand_types.append(hand_type)
 
     all_vertices = torch.cat(all_vertices, dim=1)
     all_joints = torch.cat(all_joints, dim=1)  # (N, 2*J, 3)
-    all_centers = torch.cat(all_centers, dim=1)
-    all_stddevs = torch.cat(all_stddevs, dim=1) 
 
     all_joints[..., :2] *= -1
     all_vertices[..., :2] *= -1
-    all_centers[..., :2] *= -1
-    all_gaussians = (all_centers, all_stddevs)
 
     out_dict = {
         "verts": all_vertices,
         "joints": all_joints,
-        "gaussians": all_gaussians
     }
 
     return out_dict
@@ -190,19 +177,14 @@ def _get_MANO_mesh_weak_perspective(mano_param, hand_type, mano_layer, bMatPose=
     trans = torch.cat([uv, 1. / scale * 1000 + 1000], dim=-1)  # (N, 3)
     mano_param['trans'] = trans
 
-    mesh, faces, joints, gaussians = _get_MANO_mesh(mano_param, hand_type, mano_layer, bMatPose)
+    mesh, faces, joints = _get_MANO_mesh(mano_param, hand_type, mano_layer, bMatPose)
 
 
     # apply weak perspective scaling of meshes. (To be rendered in an orthographic camera)
     mesh = scale * (mesh - trans) + trans
     joints = scale * (joints - trans) + trans
 
-    centers, stddevs = gaussians
-    centers = scale * (centers - trans) + trans
-    stddevs = scale * stddevs
-    gaussians = (centers, stddevs)
-
-    return mesh, faces, joints, gaussians
+    return mesh, faces, joints
 
 
 def _get_MANO_mesh(mano_param, hand_type, mano_layer, bMatPose=False):
@@ -247,10 +229,7 @@ def _get_MANO_mesh(mano_param, hand_type, mano_layer, bMatPose=False):
     joints = output.joints  # meter uni
     faces = mano_layer[hand_type].faces_tensor
 
-    centers, stddevs = mano_layer[hand_type].gaussian_proxies.get_gaussians(mesh, joints)
-    gaussians = (centers, stddevs)
-
-    return mesh, faces, joints, gaussians
+    return mesh, faces, joints
 
 
 def close_MANO(faces, vert_colors, hand_type):
