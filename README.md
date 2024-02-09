@@ -42,7 +42,12 @@ The codebase supports heirarchical sampling (by setting N_importance > 0 in the 
 
 
 ## Preparing the dataset ##
-Download the [InterHand2.6M dataset](https://mks0601.github.io/InterHand2.6M/) and run the following commands to prepare the dataset:
+
+We provide our pre-processed data for the `test/Capture1` split of the InterHand2.6M dataset [here](https://drive.google.com/file/d/1mbROdtclIT0Ifjdjmn_E9F0WdxyP_B4q/view?usp=sharing). After downloading it, you can proceed to the [Usage](#usage) section.
+
+To prepare the dataset for other splits, follow the instructions below.
+
+Download the [InterHand2.6M dataset](https://mks0601.github.io/InterHand2.6M/) and run the following commands:
 
 ### Option 1: Running sequentially on a single machine ###
 ```bash
